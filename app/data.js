@@ -1,3 +1,5 @@
+var allcards
+
 define(function (require) {
     var print = require('print');
 
@@ -11,6 +13,10 @@ define(function (require) {
 
         setupCards: function(sets, callback) {
             loadCardData(function(data) {
+                if (!allcards) {
+                    allcards = data
+                }
+
                 found_cards = []
 
                 if (!sets) {
@@ -68,8 +74,12 @@ function loadSetData(callback) {
     get_json("http://mtgjson.com/json/SetList.json", callback)
 }
 
-function loadCardData(callback){
-    get_json("http://mtgjson.com/json/AllSets.json", callback)    
+function loadCardData(callback) {
+    if (!allcards) {
+        get_json("http://mtgjson.com/json/AllSets.json", callback)
+    } else {
+        callback(allcards)
+    }    
 }
 
 function get_json(url, callback) {
